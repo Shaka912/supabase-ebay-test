@@ -1,6 +1,7 @@
-import express, { type Express } from 'express';
+import express, { type Express, type Response } from 'express';
 import { productRouter } from './routes/product.routes';
 import { errorHandler, notFound } from './middleware/errorHandler';
+import type { HealthResponse } from './types/http';
 
 /**
  * Builds the Express application.
@@ -13,7 +14,7 @@ export function createApp(): Express {
 
   app.use(express.json());
 
-  app.get('/health', (_req, res) => {
+  app.get('/health', (_req, res: Response<HealthResponse>) => {
     res.status(200).json({ status: 'ok' });
   });
 

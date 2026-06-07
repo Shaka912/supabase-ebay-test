@@ -1,13 +1,12 @@
 import { z } from 'zod';
+import type { ProductInput } from '../types/product';
 
 /**
- * The shape of an incoming eBay product payload.
+ * Validates an incoming eBay product payload.
  *
- *   {
- *     "title":   "Apple iPhone 13 - 128GB",
- *     "price":   429.99,
- *     "item_id": "v1|1234567890|0"
- *   }
+ * `satisfies z.ZodType<ProductInput>` binds the schema to the ProductInput
+ * interface at compile time: if the two ever drift apart, this file stops
+ * compiling. The concrete ZodObject type is preserved for `safeParse`.
  */
 export const productSchema = z.object({
   title: z.string().trim().min(1, 'title is required').max(500),
@@ -16,6 +15,4 @@ export const productSchema = z.object({
     .nonnegative('price must be zero or greater')
     .finite('price must be a finite number'),
   item_id: z.string().trim().min(1, 'item_id is required').max(100),
-});
-
-export type ProductInput = z.infer<typeof productSchema>;
+}) satisfies z.ZodType<ProductInput>;

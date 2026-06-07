@@ -40,9 +40,12 @@ GET  /health         ->  health check
 
 ```
 src/
+  types/product.ts           # Domain model (ProductInput -> ProductRecord)
+  types/http.ts              # API response envelopes + typed handler
+  types/database.ts          # Supabase schema type (types the DB client)
   config/env.ts              # Validates environment variables at startup
-  lib/supabase.ts            # Single shared Supabase client
-  validation/product.schema.ts  # Zod schema for the request body
+  lib/supabase.ts            # Single shared, fully-typed Supabase client
+  validation/product.schema.ts  # Zod schema, bound to the ProductInput type
   services/product.service.ts   # Database access (insert / list)
   controllers/product.controller.ts  # Request -> validate -> service -> response
   routes/product.routes.ts   # Maps HTTP routes to controllers
@@ -255,6 +258,11 @@ They cover: successful save (201), validation failures (400), duplicate
 - **Layered structure** (`routes → controller → service → supabase`) keeps each
   file small and single-purpose, and lets tests target the controller logic
   without a real database.
+- **End-to-end type safety** — domain interfaces (`ProductInput → ProductRecord`,
+  built with `extends`) flow through a typed Supabase client (so DB reads/writes
+  are checked with no `as` casts), typed response envelopes (`ApiResource<T>`,
+  `ApiCollection<T>`), and a typed `AsyncHandler<ResBody>`. The Zod schema is
+  bound to `ProductInput` via `satisfies`, so validation and types can't drift.
 - **Validation at the edge** with Zod — the database is never touched with
   invalid data, and clients get precise, field-level error messages.
 - **Fail-fast configuration** — environment variables are validated at startup.

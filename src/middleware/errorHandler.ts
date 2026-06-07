@@ -1,8 +1,9 @@
 import type { Request, Response, NextFunction } from 'express';
 import { HttpError } from '../errors';
+import type { ApiError } from '../types/http';
 
 /** 404 handler for any route that didn't match. */
-export function notFound(req: Request, res: Response): void {
+export function notFound(req: Request, res: Response<ApiError>): void {
   res.status(404).json({
     error: { message: `Route ${req.method} ${req.originalUrl} not found` },
   });
@@ -15,7 +16,7 @@ export function notFound(req: Request, res: Response): void {
 export function errorHandler(
   err: unknown,
   _req: Request,
-  res: Response,
+  res: Response<ApiError>,
   _next: NextFunction,
 ): void {
   // Body-parser throws this for malformed JSON.

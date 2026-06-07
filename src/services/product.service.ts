@@ -1,12 +1,6 @@
 import { supabase } from '../lib/supabase';
 import { ConflictError } from '../errors';
-import type { ProductInput } from '../validation/product.schema';
-
-/** A product row as stored in Supabase (input fields plus DB-generated ones). */
-export interface ProductRecord extends ProductInput {
-  id: string;
-  created_at: string;
-}
+import type { ProductInput, ProductRecord } from '../types/product';
 
 const TABLE = 'products';
 
@@ -15,6 +9,7 @@ const UNIQUE_VIOLATION = '23505';
 
 /**
  * Inserts a product and returns the stored row.
+ * Thanks to the typed client, `data` is inferred as `ProductRecord` — no casts.
  * Throws ConflictError(409) if the item_id already exists.
  */
 export async function createProduct(input: ProductInput): Promise<ProductRecord> {
@@ -31,7 +26,11 @@ export async function createProduct(input: ProductInput): Promise<ProductRecord>
     throw new Error(`Failed to save product: ${error.message}`);
   }
 
-  return data as ProductRecord;
+  if (!data) {
+    throw new Error('Product insert returned no data');
+  }
+
+  return data;
 }
 
 /** Returns all stored products, newest first. */
@@ -45,5 +44,5 @@ export async function listProducts(): Promise<ProductRecord[]> {
     throw new Error(`Failed to fetch products: ${error.message}`);
   }
 
-  return (data ?? []) as ProductRecord[];
+  return data ?? [];
 }
