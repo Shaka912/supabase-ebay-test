@@ -1,0 +1,38 @@
+{
+  "name": "ebay-product-api",
+  "version": "1.0.0",
+  "description": "A simple REST API that accepts mock eBay product data (title, price, item_id) and saves it to Supabase.",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "nodejs",
+    "typescript",
+    "express",
+    "supabase",
+    "rest-api",
+    "ebay"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.48.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.10.5",
+    "@types/supertest": "^6.0.2",
+    "supertest": "^7.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  }
+}

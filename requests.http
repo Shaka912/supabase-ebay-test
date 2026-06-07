@@ -1,0 +1,24 @@
+### Save an eBay product
+# (VS Code "REST Client" extension or JetBrains HTTP client can run these.)
+POST http://localhost:3000/api/products
+Content-Type: application/json
+
+{
+  "title": "Apple iPhone 13 - 128GB - Blue",
+  "price": 429.99,
+  "item_id": "v1|1234567890|0"
+}
+
+### List all saved products
+GET http://localhost:3000/api/products
+
+### Health check
+GET http://localhost:3000/health
+
+### Validation error example (missing price + item_id)
+POST http://localhost:3000/api/products
+Content-Type: application/json
+
+{
+  "title": "Missing fields"
+}
