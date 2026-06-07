@@ -54,6 +54,8 @@ src/
   app.ts                     # Builds the Express app (exported for tests)
   index.ts                   # Starts the HTTP server
 tests/product.test.ts        # Endpoint tests (service layer mocked)
+scripts/migrate.ts           # Creates the table (runs schema.sql via Postgres)
+scripts/seed.ts              # Inserts sample eBay products (idempotent upsert)
 supabase/schema.sql          # SQL to create the products table
 ```
 
