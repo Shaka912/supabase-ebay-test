@@ -85,12 +85,15 @@ supabase/schema.sql          # SQL to create the products table
 3. **Grab your credentials** (you'll paste these into `.env` next)
    - Go to **Project Settings → API**.
    - Copy the **Project URL** → this is `SUPABASE_URL`.
-   - Under **Project API keys**, copy the **`service_role`** key → this is
-     `SUPABASE_KEY`.
+   - Copy the **secret** server key → this is `SUPABASE_KEY`:
+     - New projects: **API Keys → Secret keys** (value starts with `sb_secret_`).
+     - Older projects: the **`service_role`** key under **Project API keys**.
 
-   > ⚠️ The `service_role` key is a secret with full database access. It is used
-   > **server-side only** in this project and is never exposed to clients. The
-   > `.env` file that holds it is git-ignored.
+   > ⚠️ Use the **secret / service_role** key, **not** the **publishable / anon**
+   > key — the publishable key is blocked by Row Level Security, so inserts will
+   > fail. This secret key has full database access, is used **server-side
+   > only**, and is never exposed to clients. The `.env` file that holds it is
+   > git-ignored.
 
 ---
 
@@ -120,14 +123,37 @@ You should see:
 
 ### Environment variables
 
-| Variable       | Required | Default | Description                          |
-| -------------- | -------- | ------- | ------------------------------------ |
-| `SUPABASE_URL` | yes      | —       | Your Supabase Project URL            |
-| `SUPABASE_KEY` | yes      | —       | Your Supabase `service_role` key     |
-| `PORT`         | no       | `3000`  | Port the API listens on              |
+| Variable       | Required | Default | Description                                              |
+| -------------- | -------- | ------- | -------------------------------------------------------- |
+| `SUPABASE_URL` | yes      | —       | Your Supabase Project URL                                |
+| `SUPABASE_KEY` | yes      | —       | Your Supabase **secret** / `service_role` key            |
+| `DATABASE_URL` | no\*     | —       | Postgres connection string — only for `npm run db:migrate` |
+| `PORT`         | no       | `3000`  | Port the API listens on                                  |
+
+\* `DATABASE_URL` is only needed if you run the migration script (below). The API
+itself runs without it.
 
 If a required variable is missing or malformed, the app exits immediately with a
 clear message instead of failing later.
+
+### Database: migrations & seeding (optional, but reproducible)
+
+Instead of pasting SQL into the dashboard, you can manage the database from code:
+
+```bash
+npm run db:migrate   # creates the products table (runs supabase/schema.sql)
+npm run db:seed      # inserts a few sample eBay products (idempotent upsert)
+npm run db:setup     # migrate + seed in one step
+```
+
+- **`db:migrate`** connects directly to Postgres (via `DATABASE_URL`) because
+  table creation is DDL, which the Supabase REST key can't perform. It's safe to
+  re-run (`create table if not exists`).
+- **`db:seed`** uses the app's own typed Supabase client, so it needs only
+  `SUPABASE_URL` + `SUPABASE_KEY` (the **secret** key).
+
+Get `DATABASE_URL` from **Project Settings → Database → Connection string → URI**
+and put it in `.env` (replace `[YOUR-PASSWORD]` with your database password).
 
 ---
 

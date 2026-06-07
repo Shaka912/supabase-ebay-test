@@ -10,7 +10,7 @@ create table if not exists public.products (
 );
 
 -- Row Level Security stays ON (Supabase default). The API authenticates with
--- the service_role key, which bypasses RLS, so no policy is needed for this
--- task. (If you instead use the anon/public key, you must add an INSERT/SELECT
--- policy here.)
+-- the secret / service_role key, which bypasses RLS, so no policy is needed for
+-- this task. (The publishable / anon key respects RLS and would need an
+-- INSERT/SELECT policy here.)
 alter table public.products enable row level security;
