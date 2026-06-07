@@ -18,10 +18,11 @@ GET  /health         ->  health check
 3. [Step 1 — Set up Supabase (from scratch)](#step-1--set-up-supabase-from-scratch)
 4. [Step 2 — Configure & run the API](#step-2--configure--run-the-api)
 5. [Step 3 — Send a request](#step-3--send-a-request)
-6. [API reference](#api-reference)
-7. [Running with Docker](#running-with-docker)
-8. [Tests](#tests)
-9. [Design notes](#design-notes)
+6. [Screenshot — data saved in Supabase](#screenshot--data-saved-in-supabase)
+7. [API reference](#api-reference)
+8. [Running with Docker](#running-with-docker)
+9. [Tests](#tests)
+10. [Design notes](#design-notes)
 
 ---
 
@@ -196,6 +197,15 @@ Supabase dashboard, or by calling `GET http://localhost:3000/api/products`.
 
 > A ready-to-run [`requests.http`](requests.http) file is included for the VS Code
 > "REST Client" / JetBrains HTTP client.
+
+---
+
+## Screenshot — data saved in Supabase
+
+The mock eBay products persisted to the `products` table, viewed in the Supabase
+**Table Editor**:
+
+![eBay products saved in the Supabase products table](docs/supabase-data.png)
 
 ---
 

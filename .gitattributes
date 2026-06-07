@@ -1,2 +1,10 @@
 # Normalize line endings to LF across all platforms.
 * text=auto eol=lf
+
+# Never normalize binary assets (would corrupt them).
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
